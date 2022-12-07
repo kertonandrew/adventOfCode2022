@@ -1,58 +1,157 @@
 import sys
 
 
-def task():
+def task1():
     file1 = open("input.txt", "r")
+    # file1 = open("input.txt", "r")
     lines = file1.readlines()
     path = ["/"]
     fileSystem = {}
     index = 0
 
     while index < len(lines):
-        print("start index: ", index)
-
         parts = lines[index].split()
+
+        print(f"==========")
 
         if parts[0] == "$":
             if parts[1] == "cd":
                 if parts[2] == "/":
                     path = ["/"]
-                    # print(f"reset path: {path}")
+                    print(f"reset path: {path}")
                 elif parts[2] == "..":
                     if len(path) > 1:
-                        # print(f"move up path: {path}")
+                        print(f"move up path: {path}")
                         path.pop()
                 else:
                     path.append(parts[2])
-                    # print(f"down path: {path}")
+                    print(f"down path: {path}")
 
             if parts[1] == "ls":
                 index += 1
                 nextLineParts = lines[index].split()
 
                 while index < len(lines) and nextLineParts[0] != "$":
-                    nextLineParts = lines[index].split()
+                    print("line: ", nextLineParts[:2])
 
                     if nextLineParts[0].isnumeric():
                         print("found file")
-                        if path[len(path) - 1] in fileSystem:
-                            fileSystem[path[len(path) - 1]] += nextLineParts[0]
-                        else:
-                            fileSystem[path[len(path) - 1]] = nextLineParts[0]
+                        print(nextLineParts[0])
+                        print(path)
+                        print("path:", path)
+
+                        for i in range(len(path)):
+
+                            d = path[i] if i < 1 else "".join(path[: i + 1])
+                            print("d: ", d)
+                            print("i: ", i)
+                            if d in fileSystem:
+                                fileSystem[d] += int(nextLineParts[0])
+                                print("in fileSystem", fileSystem)
+                            else:
+                                fileSystem[d] = int(nextLineParts[0])
+                                print("else fileSystem", fileSystem)
+                    else:
+                        print("skipped dir ", nextLineParts[1])
+
+                    print("fileSystem", fileSystem)
+                    print(f"----------")
 
                     index += 1
-                    print(index)
+                    if index < len(lines):
+                        nextLineParts = lines[index].split()
 
                 continue
 
-            print("end index: ", index)
             index += 1
 
-    return fileSystem
+    print(fileSystem)
+
+    totalSize = 0
+    for folderSize in fileSystem.values():
+        if folderSize <= 100000:
+            totalSize += int(folderSize)
+
+    return totalSize
+
+
+def task2():
+    file1 = open("input.txt", "r")
+    # file1 = open("input.txt", "r")
+    lines = file1.readlines()
+    path = ["/"]
+    fileSystem = {}
+    index = 0
+
+    while index < len(lines):
+        parts = lines[index].split()
+
+        print(f"==========")
+
+        if parts[0] == "$":
+            if parts[1] == "cd":
+                if parts[2] == "/":
+                    path = ["/"]
+                    print(f"reset path: {path}")
+                elif parts[2] == "..":
+                    if len(path) > 1:
+                        print(f"move up path: {path}")
+                        path.pop()
+                else:
+                    path.append(parts[2])
+                    print(f"down path: {path}")
+
+            if parts[1] == "ls":
+                index += 1
+                nextLineParts = lines[index].split()
+
+                while index < len(lines) and nextLineParts[0] != "$":
+                    print("line: ", nextLineParts[:2])
+
+                    if nextLineParts[0].isnumeric():
+                        print("found file")
+                        print(nextLineParts[0])
+                        print(path)
+                        print("path:", path)
+
+                        for i in range(len(path)):
+
+                            d = path[i] if i < 1 else "".join(path[: i + 1])
+                            print("d: ", d)
+                            print("i: ", i)
+                            if d in fileSystem:
+                                fileSystem[d] += int(nextLineParts[0])
+                                print("in fileSystem", fileSystem)
+                            else:
+                                fileSystem[d] = int(nextLineParts[0])
+                                print("else fileSystem", fileSystem)
+                    else:
+                        print("skipped dir ", nextLineParts[1])
+
+                    print("fileSystem", fileSystem)
+                    print(f"----------")
+
+                    index += 1
+                    if index < len(lines):
+                        nextLineParts = lines[index].split()
+
+                continue
+
+            index += 1
+
+    print(fileSystem)
+
+    totalSize = 0
+    for folderSize in fileSystem.values():
+        if folderSize <= 100000:
+            totalSize += int(folderSize)
+
+    return totalSize
 
 
 def main():
-    print("task 1: ", task())
+    # print("task 1: ", task1())
+    print("task 2: ", task2())
 
 
 if __name__ == "__main__":
